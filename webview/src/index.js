@@ -8,12 +8,27 @@ const windowTitleNode = $('#window-title');
 const btnSave = $('#save');
 
 let config;
+let html;
+
+const getClipboardHtml = (clip) => {
+  const html = clip.getData('text/html');
+  if (html) return html;
+  const text = clip
+    .getData('text/plain')
+    .split('\n')
+    .map((line) => `<div>${line}</div>`)
+    .join('');
+  return `<div>${text}</div>`;
+};
 
 btnSave.addEventListener('click', () => takeSnap(config));
 
 document.addEventListener('copy', () => takeSnap({ ...config, shutterAction: 'copy' }));
 
-document.addEventListener('paste', (e) => pasteCode(config, e.clipboardData));
+document.addEventListener('paste', (e) => {
+    html = getClipboardHtml(e.clipboardData);
+    pasteCode(config, html);
+});
 
 window.addEventListener('message', ({ data: { type, ...cfg } }) => {
   if (type === 'update') {
@@ -49,4 +64,8 @@ window.addEventListener('message', ({ data: { type, ...cfg } }) => {
   } else if (type === 'flash') {
     cameraFlashAnimation();
   }
+});
+
+$("#highlighted-lines").addEventListener("input", () => {
+    pasteCode(config, html);
 });
