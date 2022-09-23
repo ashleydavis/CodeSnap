@@ -72,7 +72,7 @@ body {
 }
 .line {
   display: flex;
-  color: #484C50;
+  color: #9A9A9A;
 }
 .line-number {
   text-align: right;
