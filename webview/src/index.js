@@ -69,3 +69,7 @@ window.addEventListener('message', ({ data: { type, ...cfg } }) => {
 $("#highlighted-lines").addEventListener("input", () => {
     pasteCode(config, html);
 });
+
+$("#highlighted-lines").addEventListener("paste", evt => {
+    evt.preventDefault();
+});
